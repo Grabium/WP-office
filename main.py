@@ -1,11 +1,14 @@
 from docx import Document
+from docx.shared import Pt
 from datetime import datetime
 import sys
 import os
 
-"""
-Este script captura um documento word.docx pronto e troca textos em tabela e parágrafos
-"""
+#from docx.table import _Cell
+
+
+#Este script captura um documento word.docx pronto e troca textos em tabela e parágrafos
+
 
 #sys.argv é uma lista que recebe todos os argumentos
 #parametros com valores  "<arg>" atrapalham o recebimento em python
@@ -70,10 +73,13 @@ for table in tables:
     if last_cell is cell : #células que ocupam mais de uma unidade-cubo se repetem
       continue
     last_cell = cell
+    #print(dir(cell))
+    #print(cell)
     #print(f'celula :{cell} - texto: {cell.text}.')
     for key, valor in referencias.items():#items() faz a relação: key, valor funcionar.
       #print(f'itera: {key}: {valor}')
       cell.text = (cell.text).replace(key, valor)# string.replace(novo, velho)
+      
     #print(f'formatou :{cell.text}')
 
 #for table in tables: 
@@ -88,11 +94,17 @@ for table in tables:
 #print(document.paragraphs)#exibe uma array com os ponteiros dos paragrafos.
 for paragrafo in document.paragraphs:
   for key, valor in referencias.items():
+    #paragrafo.text = paragrafo.text.replace(key, valor)
     paragrafo.text = paragrafo.text.replace(key, valor)
-  
+  #run = paragrafo.add_run(paragrafo.text)
+  #paragrafo.text = ''
+  #run.bold = True
+  paragrafo.runs[0].bold = True #as runs de todos os paragrafos estão bold. É necessário condicionar.
+  print(paragrafo.text)
+    
 #for item in document.paragraphs:
   #print(item.text)
-
+#sys.exit('teste de substituição de texto: ok')
 #contando a quantidade de documentos já salvos e adicionando um sufixo numérico de contagem ao nome do documento.
 n = (len(os.listdir('novos_documentos')) + 1)
 
